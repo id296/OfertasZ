@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>OfertasZ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .oferta {
+      background: white;
+      padding: 15px;
+      margin: 10px auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+    .oferta h2 {
+      font-size: 1.2em;
+      margin: 0 0 10px 0;
+    }
+    .oferta p {
+      margin: 5px 0;
+    }
+    .oferta a {
+      color: white;
+      background: #28a745;
+      padding: 10px;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📢 OfertasZ – Últimas ofertas</h1>
+  <div id="ofertas"></div>
+
+  <!-- 📦 Cargamos PapaParse desde CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRWcVKDQbkbBdua1dP4wqUNP9jPrHpImUUO7LLjc0fBgMfTd5_I8k2LN2veMP3IZSC5olPMGT0193RP/pub?gid=0&single=true&output=csv";
+
+    Papa.parse(SHEET_URL, {
+      download: true,
+      header: true,
+      complete: function(results) {
+        const container = document.getElementById("ofertas");
+        results.data.forEach(oferta => {
+          if (oferta.titulo && oferta.enlace) {
+            const el = document.createElement("div");
+            el.className = "oferta";
+            el.innerHTML = `
+              <h2>${oferta.titulo}</h2>
+              <p>${oferta.descripcion || ""}</p>
+              <p><strong>Fecha:</strong> ${oferta.fecha || ""}</p>
+              <a href="${oferta.enlace}" target="_blank">Ver oferta 🔗</a>
+            `;
+            container.appendChild(el);
+          }
+        });
+      },
+      error: function(err) {
+        console.error("Error al leer CSV:", err);
+      }
+    });
+  </script>
+</body>
+</html>
