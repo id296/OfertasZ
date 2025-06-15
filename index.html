@@ -2,17 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>OfertasZ</title>
-  <link rel="icon" href="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.ico" type="image/x-icon" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+<body class="bg-gray-100 text-gray-900">
 
-  <header class="text-center py-6">
-    <img src="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.png" alt="OfertasZ logo" class="mx-auto h-16 w-16 rounded-full" />
-    <h1 class="text-2xl font-bold mt-2">Las mejores ofertas actualizadas automáticamente</h1>
-    <p class="text-sm text-gray-500 dark:text-gray-400">OfertasZ - Ofertas con imágenes desde Google Sheets</p>
+  <header class="text-center p-6">
+    <h1 class="text-2xl font-bold">OfertasZ</h1>
+    <p class="text-sm text-gray-600">Ofertas desde Google Sheets con imágenes 🔥</p>
   </header>
 
   <main class="max-w-6xl mx-auto px-4">
@@ -20,26 +18,68 @@
       type="text"
       id="search"
       placeholder="🔍 Buscar ofertas..."
-      class="w-full mb-6 px-4 py-2 rounded border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+      class="w-full mb-6 px-4 py-2 rounded border border-gray-300"
     />
-    <div id="cardsContainer" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    <div id="cards" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </main>
 
-  <footer class="text-center text-gray-400 dark:text-gray-500 text-sm py-6">
-    Hecho con ❤️ por OfertasZ - Automatizado con Google Sheets & Apps Script
-  </footer>
-
   <script>
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv";
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv";
 
-    const fetchCSV = async () => {
-      const response = await fetch(SHEET_URL);
-      const text = await response.text();
-      return text.trim().split("\n").slice(1).map(row => {
-        const cols = row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(c => c.replace(/^"|"$/g, "").trim());
-        return {
-          titulo: cols[0],
-          enlace: cols[1],
-          descripcion: cols[2],
-          fecha: cols[3],
-          imagen: cols[
+    const loadData = async () => {
+      const res = await fetch(SHEET_CSV_URL);
+      const csv = await res.text();
+      const rows = csv.trim().split("\n").slice(1);
+      const data = rows.map(r => r.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(c => c.replace(/^"|"$/g, '')));
+      return data;
+    };
+
+    const createCard = (titulo, enlace, descripcion, fecha, imagenURL) => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-lg shadow p-4 flex flex-col justify-between";
+
+      const imagen = (imagenURL && imagenURL.startsWith("http") && !imagenURL.includes("Sin+imagen"))
+        ? imagenURL
+        : "https://via.placeholder.com/300x200.png?text=Sin+imagen";
+
+      card.innerHTML = `
+        <img src="${imagen}" class="w-full h-48 object-cover rounded mb-3" alt="imagen"/>
+        <h2 class="text-lg font-bold mb-1">${titulo}</h2>
+        <p class="text-sm text-gray-700 flex-1">${descripcion}</p>
+        <p class="text-xs text-gray-500 mt-2">${fecha}</p>
+        <a href="${enlace}" target="_blank" class="mt-3 inline-block text-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-sm">Ver oferta</a>
+      `;
+      return card;
+    };
+
+    const render = async () => {
+      const datos = await loadData();
+      const cardsDiv = document.getElementById("cards");
+      cardsDiv.innerHTML = "";
+
+      datos.reverse().forEach(([titulo, enlace, descripcion, fecha, imagen]) => {
+        if (titulo && enlace) {
+          const card = createCard(titulo, enlace, descripcion, fecha, imagen);
+          cardsDiv.appendChild(card);
+        }
+      });
+    };
+
+    document.getElementById("search").addEventListener("input", async function () {
+      const query = this.value.toLowerCase();
+      const datos = await loadData();
+      const filtrados = datos.filter(([titulo, , descripcion]) =>
+        titulo.toLowerCase().includes(query) || descripcion.toLowerCase().includes(query)
+      );
+      const cardsDiv = document.getElementById("cards");
+      cardsDiv.innerHTML = "";
+      filtrados.reverse().forEach(([titulo, enlace, descripcion, fecha, imagen]) => {
+        const card = createCard(titulo, enlace, descripcion, fecha, imagen);
+        cardsDiv.appendChild(card);
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>
