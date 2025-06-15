@@ -80,8 +80,7 @@
         search.addEventListener("input", (e) => {
           const q = e.target.value.toLowerCase();
           const filtradas = ofertas.filter(o =>
-            o.titulo.toLowerCase().includes(q) ||
-            o.descripcion.toLowerCase().includes(q)
+            o.titulo.toLowerCase().includes(q) || o.descripcion.toLowerCase().includes(q)
           );
           render([...filtradas].reverse());
         });
