@@ -83,7 +83,11 @@
           });
         };
 
-        const ordenadas = [...ofertas].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        const ordenadas = [...ofertas].sort((a, b) => {
+          const fa = new Date(a.fecha).getTime();
+          const fb = new Date(b.fecha).getTime();
+          return isNaN(fb) - isNaN(fa) || fb - fa;
+        });
         render(ordenadas);
 
         search.addEventListener("input", (e) => {
@@ -92,7 +96,11 @@
             oferta.titulo.toLowerCase().includes(q) ||
             oferta.descripcion.toLowerCase().includes(q)
           );
-          const ordenadas = [...filtradas].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+          const ordenadas = [...filtradas].sort((a, b) => {
+            const fa = new Date(a.fecha).getTime();
+            const fb = new Date(b.fecha).getTime();
+            return isNaN(fb) - isNaN(fa) || fb - fa;
+          });
           render(ordenadas);
         });
       })
