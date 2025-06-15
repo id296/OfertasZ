@@ -20,7 +20,7 @@
     <p class="text-sm text-gray-500 dark:text-gray-400">OfertasZ - Conectado a Google Sheets + IFTTT + Amazon</p>
   </header>
 
-  <main class="max-w-5xl mx-auto px-4">
+  <main class="max-w-6xl mx-auto px-4">
     <input
       type="text"
       id="search"
@@ -45,6 +45,11 @@
       return tieneTag ? url : url + (url.includes("?") ? "&" : "?") + "tag=imadinho0c-21";
     };
 
+    const extraerImagen = (html) => {
+      const match = html.match(/<img[^>]*src=["']([^"']+)["']/i);
+      return match ? match[1] : null;
+    };
+
     fetch(SHEET_URL)
       .then((res) => res.text())
       .then((data) => {
@@ -62,13 +67,16 @@
         const render = (filtradas) => {
           contenedor.innerHTML = "";
           filtradas.reverse().forEach(oferta => {
+            const imgUrl = extraerImagen(oferta.descripcion);
             const card = document.createElement("div");
-            card.className = "bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 hover:shadow-lg transition flex flex-col justify-between";
-
+            card.className = "bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 hover:shadow-lg transition flex flex-col justify-between";
             card.innerHTML = `
-              <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">${oferta.titulo}</h2>
-              <div class="text-sm text-gray-600 dark:text-gray-300 flex-grow mb-2" style="overflow: hidden;">${oferta.descripcion || ""}</div>
-              <p class="text-xs text-gray-400 dark:text-gray-500 mb-3 italic">📅 ${oferta.fecha || ""}</p>
+              <div class="mb-3 h-40 flex items-center justify-center overflow-hidden rounded-md bg-gray-200 dark:bg-gray-700">
+                ${imgUrl ? `<img src="${imgUrl}" alt="Oferta" class="object-contain h-full">` : '<span class="text-xs text-gray-500">Sin imagen</span>'}
+              </div>
+              <h2 class="text-base font-bold text-gray-800 dark:text-gray-100 mb-1">${oferta.titulo}</h2>
+              <div class="text-sm text-gray-600 dark:text-gray-300 flex-grow max-h-24 overflow-y-auto description">${oferta.descripcion || ""}</div>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 mb-3 italic">📅 ${oferta.fecha || ""}</p>
               <a href="${agregarAfiliado(oferta.enlace)}" target="_blank" class="inline-block text-center bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition text-sm font-semibold">Ver oferta</a>
             `;
             contenedor.appendChild(card);
