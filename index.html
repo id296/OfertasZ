@@ -50,6 +50,11 @@
       return match ? match[1] : null;
     };
 
+    const parseFecha = (str) => {
+      const f = new Date(str);
+      return isNaN(f.getTime()) ? null : f.getTime();
+    };
+
     fetch(SHEET_URL)
       .then((res) => res.text())
       .then((data) => {
@@ -83,11 +88,7 @@
           });
         };
 
-        const ordenadas = [...ofertas].sort((a, b) => {
-          const fa = new Date(a.fecha).getTime();
-          const fb = new Date(b.fecha).getTime();
-          return isNaN(fb) - isNaN(fa) || fb - fa;
-        });
+        const ordenadas = [...ofertas].sort((a, b) => parseFecha(b.fecha) - parseFecha(a.fecha));
         render(ordenadas);
 
         search.addEventListener("input", (e) => {
@@ -96,11 +97,7 @@
             oferta.titulo.toLowerCase().includes(q) ||
             oferta.descripcion.toLowerCase().includes(q)
           );
-          const ordenadas = [...filtradas].sort((a, b) => {
-            const fa = new Date(a.fecha).getTime();
-            const fb = new Date(b.fecha).getTime();
-            return isNaN(fb) - isNaN(fa) || fb - fa;
-          });
+          const ordenadas = [...filtradas].sort((a, b) => parseFecha(b.fecha) - parseFecha(a.fecha));
           render(ordenadas);
         });
       })
