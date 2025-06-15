@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OfertasZ</title>
   <link rel="icon" href="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.ico" type="image/x-icon" />
-  <script>
-    tailwind.config = {
-      darkMode: 'media',
-    }
-  </script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
@@ -17,7 +12,7 @@
   <header class="text-center py-6">
     <img src="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.png" alt="OfertasZ logo" class="mx-auto h-16 w-16 rounded-full" />
     <h1 class="text-2xl font-bold mt-2">Las mejores ofertas actualizadas automáticamente</h1>
-    <p class="text-sm text-gray-500 dark:text-gray-400">OfertasZ - Conectado a Google Sheets + IFTTT + Amazon</p>
+    <p class="text-sm text-gray-500 dark:text-gray-400">OfertasZ - Ofertas con imágenes desde Google Sheets</p>
   </header>
 
   <main class="max-w-6xl mx-auto px-4">
@@ -27,77 +22,24 @@
       placeholder="🔍 Buscar ofertas..."
       class="w-full mb-6 px-4 py-2 rounded border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
     />
-    <div id="ofertas" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    <div id="cardsContainer" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
   </main>
 
   <footer class="text-center text-gray-400 dark:text-gray-500 text-sm py-6">
-    Hecho con ❤️ por OfertasZ - Automatizado con Google Sheets & IFTTT
+    Hecho con ❤️ por OfertasZ - Automatizado con Google Sheets & Apps Script
   </footer>
 
   <script>
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv";
 
-    const agregarAfiliado = (url) => {
-      if (!url) return "#";
-      if (url.includes("/go?id=")) return url;
-      if (!url.includes("amazon.")) return url;
-      const tieneTag = url.includes("tag=");
-      return tieneTag ? url : url + (url.includes("?") ? "&" : "?") + "tag=imadinho0c-21";
-    };
-
-    const extraerImagen = (html) => {
-      const match = html.match(/<img[^>]*src=["']([^"']+)["']/i);
-      return match ? match[1] : null;
-    };
-
-    fetch(SHEET_URL)
-      .then(res => res.text())
-      .then(data => {
-        const rows = data.trim().split("\n").slice(1).reverse(); // ← ¡ESTA LÍNEA REVIERTE LAS FILAS!
-        const ofertas = rows.map(row => {
-          const cols = row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
-          if (cols.length < 2) return null;
-          const [titulo, enlace, descripcion = "", fecha = ""] = cols.map(cell => cell.replace(/^\"|\"$/g, '').trim());
-          return { titulo, enlace, descripcion, fecha };
-        }).filter(Boolean);
-
-        const contenedor = document.getElementById("ofertas");
-        const search = document.getElementById("search");
-
-        const render = (filtradas) => {
-          contenedor.innerHTML = "";
-          filtradas.forEach(oferta => {
-            const imgUrl = extraerImagen(oferta.descripcion);
-            const card = document.createElement("div");
-            card.className = "bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 hover:shadow-lg transition flex flex-col justify-between";
-            card.innerHTML = `
-              <div class="mb-3 h-40 flex items-center justify-center overflow-hidden rounded-md bg-gray-200 dark:bg-gray-700">
-                ${imgUrl ? `<img src="${imgUrl}" alt="Oferta" class="object-contain h-full">` : '<span class="text-xs text-gray-500">Sin imagen</span>'}
-              </div>
-              <h2 class="text-base font-bold text-gray-800 dark:text-gray-100 mb-1">${oferta.titulo}</h2>
-              <div class="text-sm text-gray-600 dark:text-gray-300 flex-grow max-h-24 overflow-y-auto description">${oferta.descripcion || ""}</div>
-              <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 mb-3 italic">📅 ${oferta.fecha || ""}</p>
-              <a href="${agregarAfiliado(oferta.enlace)}" target="_blank" class="inline-block text-center bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition text-sm font-semibold">Ver oferta</a>
-            `;
-            contenedor.appendChild(card);
-          });
-        };
-
-        render(ofertas);
-
-        search.addEventListener("input", (e) => {
-          const q = e.target.value.toLowerCase();
-          const filtradas = ofertas.filter(oferta =>
-            oferta.titulo.toLowerCase().includes(q) ||
-            oferta.descripcion.toLowerCase().includes(q)
-          );
-          render(filtradas);
-        });
-      })
-      .catch(err => {
-        document.getElementById("ofertas").innerHTML = "<p class='text-red-500'>No se pudieron cargar las ofertas.</p>";
-        console.error("Error cargando CSV:", err);
-      });
-  </script>
-</body>
-</html>
+    const fetchCSV = async () => {
+      const response = await fetch(SHEET_URL);
+      const text = await response.text();
+      return text.trim().split("\n").slice(1).map(row => {
+        const cols = row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(c => c.replace(/^"|"$/g, "").trim());
+        return {
+          titulo: cols[0],
+          enlace: cols[1],
+          descripcion: cols[2],
+          fecha: cols[3],
+          imagen: cols[
