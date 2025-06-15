@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>OfertasZ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .oferta {
+      background: white;
+      padding: 15px;
+      margin: 10px auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+    .oferta h2 {
+      font-size: 1.2em;
+      margin: 0 0 10px 0;
+    }
+    .oferta p {
+      margin: 5px 0;
+    }
+    .oferta a {
+      color: white;
+      background: #28a745;
+      padding: 10px;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📢 OfertasZ – Últimas ofertas</h1>
+  <div id="ofertas"></div>
+
+  <script>
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRWcVKDQbkbBdua1dP4wqUNP9jPrHpImUUO7LLjc0fBgMfTd5_I8k2LN2veMP3IZSC5olPMGT0193RP/pub?gid=0&single=true&output=csv";
+
+    fetch(SHEET_URL)
+      .then(response => response.text())
+      .then(csv => {
+        const rows = csv.split("\n").slice(1); // quitar encabezados
+        const container = document.getElementById("ofertas");
+
+        rows.forEach(row => {
+          const [titulo, enlace, descripcion, fecha] = row.split(",");
+
+          if (titulo && enlace) {
+            const oferta = document.createElement("div");
+            oferta.className = "oferta";
+            oferta.innerHTML = `
+              <h2>${titulo.trim()}</h2>
+              <p>${descripcion ? descripcion.trim() : ""}</p>
+              <p><strong>Fecha:</strong> ${fecha ? fecha.trim() : ""}</p>
+              <a href="${enlace.trim()}" target="_blank">Ver oferta 🔗</a>
+            `;
+            container.appendChild(oferta);
+          }
+        });
+      })
+      .catch(error => {
+        console.error("Error al leer la hoja:", error);
+      });
+  </script>
+</body>
+</html>
