@@ -2,107 +2,89 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OfertasZ - Las mejores ofertas actualizadas</title>
-<script>
-  tailwind.config = {
-    darkMode: 'media', // usa el modo oscuro del sistema
-  }
-</script>
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OfertasZ</title>
+  <script>
+    tailwind.config = {
+      darkMode: 'media',
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
 
-  <!-- CABECERA CON LOGO -->
-  <header class="bg-white dark: shadow">
-    <div class="max-w-4xl mx-auto px-4 py-6 text-center">
-      <div class="flex justify-center items-center flex-col mb-4">
-  <a href="/">
-  <img src="logo-ofertasz.jpg" alt="OfertasZ logo" class="h-16 mb-2 rounded-md hover:opacity-90 transition" />
-</a>
-
-  <p class="text-gray-500"></p>
-</div>
-
-      <p class="text-gray-500 mt-1">Las mejores ofertas actualizadas automáticamente</p>
-    </div>
+  <header class="text-center py-6">
+    <img src="logo.png" alt="OfertasZ logo" class="mx-auto h-16 w-16 rounded-full" />
+    <h1 class="text-2xl font-bold mt-2">Las mejores ofertas actualizadas automáticamente</h1>
+    <p class="text-sm text-gray-500 dark:text-gray-400">Las mejores ofertas actualizadas automáticamente</p>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="max-w-4xl mx-auto px-4 py-8">
-    <!-- Buscador -->
-    <div class="mb-6">
-      <input
-        type="text"
-        id="buscador"
-        placeholder="🔍 Buscar ofertas..."
-        class="w-full p-3 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
-    </div>
-
-    <!-- Ofertas -->
-<div id="ofertas" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 px-2"></div>
+  <main class="max-w-5xl mx-auto px-4">
+    <input
+      type="text"
+      id="search"
+      placeholder="🔍 Buscar ofertas..."
+      class="w-full mb-6 px-4 py-2 rounded border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+    />
+    <div id="ofertas" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
   </main>
 
-  <!-- PIE DE PÁGINA -->
-  <footer class="text-center text-gray-400 text-sm py-6">
+  <footer class="text-center text-gray-400 dark:text-gray-500 text-sm py-6">
     Hecho con ❤️ por OfertasZ - Automatizado con Google Sheets & IFTTT
   </footer>
 
-  <!-- LÓGICA DE OFERTAS -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv";
 
-    let datosOriginales = [];
+    const agregarAfiliado = (url) => {
+      if (!url) return "#";
+      if (url.includes("/go?id=")) return url;
+      if (!url.includes("amazon.")) return url;
+      const tieneTag = url.includes("tag=");
+      return tieneTag ? url : url + (url.includes("?") ? "&" : "?") + "tag=imadinho0c-21";
+    };
 
-    function mostrarOfertas(filtro = "") {
-      const container = document.getElementById("ofertas");
-      container.innerHTML = "";
+    fetch(SHEET_URL)
+      .then((res) => res.text())
+      .then((data) => {
+        const rows = data.trim().split("\n").slice(1);
+        const ofertas = rows.map(row => {
+          const [titulo, enlace, descripcion, fecha] = row.split("|||").map(cell => cell.trim());
+          return { titulo, enlace, descripcion, fecha };
+        });
 
-      const ofertasFiltradas = datosOriginales.filter(oferta =>
-        (oferta.titulo && oferta.titulo.toLowerCase().includes(filtro)) ||
-        (oferta.descripcion && oferta.descripcion.toLowerCase().includes(filtro))
-      );
+        const contenedor = document.getElementById("ofertas");
+        const search = document.getElementById("search");
 
-      if (ofertasFiltradas.length === 0) {
-        container.innerHTML = "<p class='text-center text-gray-500'>No se encontraron ofertas.</p>";
-        return;
-      }
+        const render = (filtradas) => {
+          contenedor.innerHTML = "";
+          filtradas.reverse().forEach(oferta => {
+            const card = document.createElement("div");
+            card.className = "bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 hover:shadow-lg transition flex flex-col justify-between";
 
-      ofertasFiltradas.reverse().forEach(oferta => {
+            card.innerHTML = `
+              <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">${oferta.titulo}</h2>
+              <p class="text-sm text-gray-600 dark:text-gray-300 flex-grow mb-2">${oferta.descripcion || ""}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mb-3 italic">📅 ${oferta.fecha || ""}</p>
+              <a href="${agregarAfiliado(oferta.enlace)}" target="_blank" class="inline-block text-center bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition text-sm font-semibold">Ver oferta</a>
+            `;
+            contenedor.appendChild(card);
+          });
+        };
 
-        const card = document.createElement("div");
-card.className = "bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 hover:shadow-lg transition flex flex-col justify-between";
-card.innerHTML = `
-  <h2 class="text-lg font-bold text-gray-800 mb-2">${oferta.titulo}</h2>
-  <p class="text-sm text-gray-600 flex-grow mb-2">${oferta.descripcion || ""}</p>
-  <p class="text-xs text-gray-400 mb-3 italic">📅 ${oferta.fecha || ""}</p>
-<a href="${oferta.enlace.includes('/go?id=') ? oferta.enlace : agregarAfiliado(oferta.enlace)}" target="_blank" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition text-sm font-semibold">Ver oferta</a>
-`;
+        render(ofertas);
 
-        container.appendChild(card);
+        search.addEventListener("input", (e) => {
+          const q = e.target.value.toLowerCase();
+          const filtradas = ofertas.filter(oferta =>
+            oferta.titulo.toLowerCase().includes(q) ||
+            oferta.descripcion.toLowerCase().includes(q)
+          );
+          render(filtradas);
+        });
       });
-    }
-
-    Papa.parse(SHEET_URL, {
-      download: true,
-      header: true,
-      complete: function(results) {
-        datosOriginales = results.data;
-        mostrarOfertas();
-      },
-      error: function(err) {
-        console.error("Error al leer CSV:", err);
-      }
-    });
-
-    document.addEventListener("input", function (e) {
-      if (e.target.id === "buscador") {
-        const filtro = e.target.value.trim().toLowerCase();
-        mostrarOfertas(filtro);
-      }
-    });
   </script>
 </body>
 </html>
+
+arreglo index
