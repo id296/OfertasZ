@@ -78,7 +78,7 @@ card.innerHTML = `
   <h2 class="text-lg font-bold text-gray-800 mb-2">${oferta.titulo}</h2>
   <p class="text-sm text-gray-600 flex-grow mb-2">${oferta.descripcion || ""}</p>
   <p class="text-xs text-gray-400 mb-3 italic">📅 ${oferta.fecha || ""}</p>
-  <a href="${agregarAfiliado(oferta.enlace)}" target="_blank" class="inline-block text-center bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition text-sm font-semibold">Ver oferta</a>
+<a href="${oferta.enlace.includes('/go?id=') ? oferta.enlace : agregarAfiliado(oferta.enlace)}" target="_blank" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition text-sm font-semibold">Ver oferta</a>
 `;
 
         container.appendChild(card);
