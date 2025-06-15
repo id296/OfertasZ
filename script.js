@@ -1,4 +1,4 @@
-const sheetUrl = "https://opensheet.vercel.app/14620k8AIFDBsMCI5KJFFhCUYNsVIkrPsVehGydpDfKM/Hoja%201";
+const sheetUrl = "https://opensheet.vercel.app/14620k8AIFDBsMCI5KJFFhCUYNsVIkrPsVehGydpDfKM/Hoja1";
 
 fetch(sheetUrl)
   .then(response => response.json())
