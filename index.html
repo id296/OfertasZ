@@ -51,7 +51,7 @@
         const rows = data.trim().split("\n").slice(1);
         const ofertas = rows.map(row => {
           const partes = row.split("|||");
-          if (partes.length < 2) return null; // mostrar aunque falte descripción o fecha
+          if (partes.length < 2) return null;
           const [titulo, enlace, descripcion = "", fecha = ""] = partes.map(cell => cell.trim());
           return { titulo, enlace, descripcion, fecha };
         }).filter(Boolean);
