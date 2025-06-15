@@ -50,9 +50,9 @@
       .then((data) => {
         const rows = data.trim().split("\n").slice(1);
         const ofertas = rows.map(row => {
-          const partes = row.split("|||");
-          if (partes.length < 2) return null;
-          const [titulo, enlace, descripcion = "", fecha = ""] = partes.map(cell => cell.trim());
+          const cols = row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
+          if (cols.length < 2) return null;
+          const [titulo, enlace, descripcion = "", fecha = ""] = cols.map(cell => cell.replace(/^\"|\"$/g, '').trim());
           return { titulo, enlace, descripcion, fecha };
         }).filter(Boolean);
 
