@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OfertasZ</title>
+  <link rel="icon" href="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.ico" type="image/x-icon" />
   <script>
     tailwind.config = {
       darkMode: 'media',
@@ -14,9 +15,9 @@
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
 
   <header class="text-center py-6">
-    <img src="logo.png" alt="OfertasZ logo" class="mx-auto h-16 w-16 rounded-full" />
+    <img src="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.png" alt="OfertasZ logo" class="mx-auto h-16 w-16 rounded-full" />
     <h1 class="text-2xl font-bold mt-2">Las mejores ofertas actualizadas automáticamente</h1>
-    <p class="text-sm text-gray-500 dark:text-gray-400">Las mejores ofertas actualizadas automáticamente</p>
+    <p class="text-sm text-gray-500 dark:text-gray-400">OfertasZ - Conectado a Google Sheets + IFTTT + Amazon</p>
   </header>
 
   <main class="max-w-5xl mx-auto px-4">
@@ -49,9 +50,11 @@
       .then((data) => {
         const rows = data.trim().split("\n").slice(1);
         const ofertas = rows.map(row => {
-          const [titulo, enlace, descripcion, fecha] = row.split("|||").map(cell => cell.trim());
+          const partes = row.split("|||");
+          if (partes.length < 4) return null;
+          const [titulo, enlace, descripcion, fecha] = partes.map(cell => cell.trim());
           return { titulo, enlace, descripcion, fecha };
-        });
+        }).filter(Boolean);
 
         const contenedor = document.getElementById("ofertas");
         const search = document.getElementById("search");
@@ -86,5 +89,3 @@
   </script>
 </body>
 </html>
-
-arreglo index
