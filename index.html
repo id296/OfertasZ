@@ -4,12 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>OfertasZ - Las mejores ofertas actualizadas</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'media', // usa el modo oscuro del sistema
+  }
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 text-gray-900 font-sans">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
 
   <!-- CABECERA CON LOGO -->
-  <header class="bg-white shadow">
+  <header class="bg-white dark: shadow">
     <div class="max-w-4xl mx-auto px-4 py-6 text-center">
       <div class="flex justify-center items-center flex-col mb-4">
   <a href="/">
@@ -68,7 +73,7 @@
       ofertasFiltradas.reverse().forEach(oferta => {
 
         const card = document.createElement("div");
-        card.className = "bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition flex flex-col justify-between";
+card.className = "bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 hover:shadow-lg transition flex flex-col justify-between";
 card.innerHTML = `
   <h2 class="text-lg font-bold text-gray-800 mb-2">${oferta.titulo}</h2>
   <p class="text-sm text-gray-600 flex-grow mb-2">${oferta.descripcion || ""}</p>
