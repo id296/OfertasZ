@@ -67,7 +67,7 @@
 
             card.innerHTML = `
               <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">${oferta.titulo}</h2>
-              <p class="text-sm text-gray-600 dark:text-gray-300 flex-grow mb-2">${oferta.descripcion || ""}</p>
+              <div class="text-sm text-gray-600 dark:text-gray-300 flex-grow mb-2" style="overflow: hidden;">${oferta.descripcion || ""}</div>
               <p class="text-xs text-gray-400 dark:text-gray-500 mb-3 italic">📅 ${oferta.fecha || ""}</p>
               <a href="${agregarAfiliado(oferta.enlace)}" target="_blank" class="inline-block text-center bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition text-sm font-semibold">Ver oferta</a>
             `;
