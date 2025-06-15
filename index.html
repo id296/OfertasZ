@@ -66,7 +66,7 @@
 
         const render = (filtradas) => {
           contenedor.innerHTML = "";
-          filtradas.reverse().forEach(oferta => {
+          filtradas.forEach(oferta => {
             const imgUrl = extraerImagen(oferta.descripcion);
             const card = document.createElement("div");
             card.className = "bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 hover:shadow-lg transition flex flex-col justify-between";
@@ -83,7 +83,8 @@
           });
         };
 
-        render(ofertas);
+        const ordenadas = [...ofertas].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        render(ordenadas);
 
         search.addEventListener("input", (e) => {
           const q = e.target.value.toLowerCase();
@@ -91,7 +92,8 @@
             oferta.titulo.toLowerCase().includes(q) ||
             oferta.descripcion.toLowerCase().includes(q)
           );
-          render(filtradas);
+          const ordenadas = [...filtradas].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+          render(ordenadas);
         });
       })
       .catch((err) => {
