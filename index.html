@@ -50,15 +50,10 @@
       return match ? match[1] : null;
     };
 
-    const parseFecha = (str) => {
-      const f = new Date(str);
-      return isNaN(f.getTime()) ? null : f.getTime();
-    };
-
     fetch(SHEET_URL)
-      .then((res) => res.text())
-      .then((data) => {
-        const rows = data.trim().split("\n").slice(1);
+      .then(res => res.text())
+      .then(data => {
+        const rows = data.trim().split("\n").slice(1).reverse(); // ← ¡ESTA LÍNEA REVIERTE LAS FILAS!
         const ofertas = rows.map(row => {
           const cols = row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
           if (cols.length < 2) return null;
@@ -88,8 +83,7 @@
           });
         };
 
-        const ordenadas = [...ofertas];
-        render(ordenadas);
+        render(ofertas);
 
         search.addEventListener("input", (e) => {
           const q = e.target.value.toLowerCase();
@@ -97,11 +91,10 @@
             oferta.titulo.toLowerCase().includes(q) ||
             oferta.descripcion.toLowerCase().includes(q)
           );
-          const ordenadas = [...filtradas];
-          render(ordenadas);
+          render(filtradas);
         });
       })
-      .catch((err) => {
+      .catch(err => {
         document.getElementById("ofertas").innerHTML = "<p class='text-red-500'>No se pudieron cargar las ofertas.</p>";
         console.error("Error cargando CSV:", err);
       });
