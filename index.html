@@ -51,8 +51,8 @@
         const rows = data.trim().split("\n").slice(1);
         const ofertas = rows.map(row => {
           const partes = row.split("|||");
-          if (partes.length < 4) return null;
-          const [titulo, enlace, descripcion, fecha] = partes.map(cell => cell.trim());
+          if (partes.length < 2) return null; // mostrar aunque falte descripción o fecha
+          const [titulo, enlace, descripcion = "", fecha = ""] = partes.map(cell => cell.trim());
           return { titulo, enlace, descripcion, fecha };
         }).filter(Boolean);
 
@@ -85,6 +85,10 @@
           );
           render(filtradas);
         });
+      })
+      .catch((err) => {
+        document.getElementById("ofertas").innerHTML = "<p class='text-red-500'>No se pudieron cargar las ofertas.</p>";
+        console.error("Error cargando CSV:", err);
       });
   </script>
 </body>
