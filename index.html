@@ -1,75 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>OfertasZ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    .oferta {
-      background: white;
-      padding: 15px;
-      margin: 10px auto;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      max-width: 600px;
-    }
-    .oferta h2 {
-      font-size: 1.2em;
-      margin: 0 0 10px 0;
-    }
-    .oferta p {
-      margin: 5px 0;
-    }
-    .oferta a {
-      color: white;
-      background: #28a745;
-      padding: 10px;
-      text-decoration: none;
-      display: inline-block;
-      border-radius: 5px;
-      margin-top: 10px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OfertasZ - Las mejores ofertas actualizadas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>📢 OfertasZ – Últimas ofertas</h1>
-  <div id="ofertas"></div>
+<body class="bg-gray-100 text-gray-900 font-sans">
 
-  <!-- 📦 Cargamos PapaParse desde CDN -->
+  <header class="bg-white shadow">
+    <div class="max-w-4xl mx-auto px-4 py-6">
+      <h1 class="text-3xl font-bold text-center">📦 OfertasZ</h1>
+      <p class="text-center text-gray-500">Las mejores ofertas actualizadas automáticamente</p>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <div id="ofertas" class="grid gap-6"></div>
+  </main>
+
+  <footer class="text-center text-gray-400 text-sm py-6">
+    Hecho con ❤️ por OfertasZ - Automatizado con Google Sheets & IFTTT
+  </footer>
+
+  <!-- PapaParse para leer el CSV -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv";
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv"; // <-- Pega tu enlace CSV aquí
 
     Papa.parse(SHEET_URL, {
       download: true,
       header: true,
       complete: function(results) {
         const container = document.getElementById("ofertas");
+
+        if (!results.data || results.data.length === 0) {
+          container.innerHTML = "<p class='text-center text-gray-500'>No hay ofertas disponibles por ahora.</p>";
+          return;
+        }
+
         results.data.forEach(oferta => {
           if (oferta.titulo && oferta.enlace) {
-            const el = document.createElement("div");
-            el.className = "oferta";
-            el.innerHTML = `
-              <h2>${oferta.titulo}</h2>
-              <p>${oferta.descripcion || ""}</p>
-              <p><strong>Fecha:</strong> ${oferta.fecha || ""}</p>
-              <a href="${oferta.enlace}" target="_blank">Ver oferta 🔗</a>
+            const card = document.createElement("div");
+            card.className = "bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition";
+            card.innerHTML = `
+              <h2 class="text-xl font-semibold mb-2">${oferta.titulo}</h2>
+              <p class="text-gray-600 mb-2">${oferta.descripcion || ""}</p>
+              <p class="text-sm text-gray-400 mb-4">🗓 ${oferta.fecha || ""}</p>
+              <a href="${oferta.enlace}" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Ver oferta</a>
             `;
-            container.appendChild(el);
+            container.appendChild(card);
           }
         });
       },
       error: function(err) {
-        console.error("Error al leer CSV:", err);
+        console.error("Error al leer la hoja:", err);
       }
     });
   </script>
