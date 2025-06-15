@@ -4,23 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OfertasZ</title>
-  <link rel="icon" href="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.ico" type="image/x-icon" />
-  <script>
-    tailwind.config = {
-      darkMode: 'media',
-    }
-  </script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
 
   <header class="text-center py-6">
-    <img src="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.png" alt="OfertasZ logo" class="mx-auto h-16 w-16 rounded-full" />
+    <img src="logo.png" alt="OfertasZ logo" class="mx-auto h-16 w-16 rounded-full" />
     <h1 class="text-2xl font-bold mt-2">Las mejores ofertas actualizadas automáticamente</h1>
-    <p class="text-sm text-gray-500 dark:text-gray-400">OfertasZ - Conectado a Google Sheets + IFTTT + Amazon</p>
+    <p class="text-sm text-gray-500 dark:text-gray-400">OfertasZ - desde Google Sheets + IFTTT + Amazon</p>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4">
+  <main class="max-w-7xl mx-auto px-4">
     <input
       type="text"
       id="search"
@@ -31,7 +26,7 @@
   </main>
 
   <footer class="text-center text-gray-400 dark:text-gray-500 text-sm py-6">
-    Hecho con ❤️ por OfertasZ - Automatizado con Google Sheets & IFTTT
+    Hecho con ❤️ por OfertasZ
   </footer>
 
   <script>
@@ -45,39 +40,34 @@
       return tieneTag ? url : url + (url.includes("?") ? "&" : "?") + "tag=imadinho0c-21";
     };
 
-    const extraerImagen = (html) => {
-      const match = html.match(/<img[^>]*src=["']([^"']+)["']/i);
-      return match ? match[1] : null;
-    };
-
     fetch(SHEET_URL)
       .then((res) => res.text())
       .then((data) => {
         const rows = data.trim().split("\n").slice(1);
         const ofertas = rows.map(row => {
-          const cols = row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
-          if (cols.length < 2) return null;
-          const [titulo, enlace, descripcion = "", fecha = ""] = cols.map(cell => cell.replace(/^\"|\"$/g, '').trim());
-          return { titulo, enlace, descripcion, fecha };
-        }).filter(Boolean);
+          const cols = row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(c => c.replace(/^"|"$/g, "").trim());
+          const [titulo, enlace, descripcion = "", fecha = "", imagen = ""] = cols;
+          return { titulo, enlace, descripcion, fecha, imagen };
+        }).filter(o => o.titulo && o.enlace);
 
         const contenedor = document.getElementById("ofertas");
         const search = document.getElementById("search");
 
-        const render = (filtradas) => {
+        const render = (lista) => {
           contenedor.innerHTML = "";
-          filtradas.forEach(oferta => {
-            const imgUrl = extraerImagen(oferta.descripcion);
+          lista.forEach(o => {
+            const img = o.imagen && o.imagen.startsWith("http") ? o.imagen : "https://via.placeholder.com/300x200.png?text=Sin+imagen";
             const card = document.createElement("div");
             card.className = "bg-white dark:bg-gray-800 rounded-lg shadow p-3 hover:shadow-lg transition text-sm flex flex-col justify-between";
+
             card.innerHTML = `
               <div class="mb-2 h-28 flex items-center justify-center overflow-hidden rounded bg-gray-200 dark:bg-gray-700">
-                ${imgUrl ? `<img src="${imgUrl}" alt="Oferta" class="object-contain h-full">` : '<span class="text-xs text-gray-500">Sin imagen</span>'}
+                <img src="${img}" alt="Imagen de la oferta" class="object-contain h-full w-full">
               </div>
-              <h2 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2">${oferta.titulo}</h2>
-              <div class="text-xs text-gray-600 dark:text-gray-300 flex-grow max-h-20 overflow-y-auto description">${oferta.descripcion || ""}</div>
-              <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 mb-1 italic">📅 ${oferta.fecha || ""}</p>
-              <a href="${agregarAfiliado(oferta.enlace)}" target="_blank" class="inline-block text-center bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition text-xs font-medium">
+              <h2 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2">${o.titulo}</h2>
+              <div class="text-xs text-gray-600 dark:text-gray-300 flex-grow max-h-20 overflow-y-auto">${o.descripcion}</div>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 mb-1 italic">📅 ${o.fecha || ""}</p>
+              <a href="${agregarAfiliado(o.enlace)}" target="_blank" class="inline-block text-center bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition text-xs font-medium">
                 🛒 Ver oferta
               </a>
             `;
@@ -89,9 +79,9 @@
 
         search.addEventListener("input", (e) => {
           const q = e.target.value.toLowerCase();
-          const filtradas = ofertas.filter(oferta =>
-            oferta.titulo.toLowerCase().includes(q) ||
-            oferta.descripcion.toLowerCase().includes(q)
+          const filtradas = ofertas.filter(o =>
+            o.titulo.toLowerCase().includes(q) ||
+            o.descripcion.toLowerCase().includes(q)
           );
           render([...filtradas].reverse());
         });
