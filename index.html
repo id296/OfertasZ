@@ -16,7 +16,8 @@
   </header>
 
   <main class="max-w-4xl mx-auto px-4 py-8">
-    <div id="ofertas" class="grid gap-6"></div>
+    <div id="ofertas" class="grid gap-4 sm:grid-cols-2"></div>
+
   </main>
 
   <footer class="text-center text-gray-400 text-sm py-6">
@@ -42,13 +43,14 @@
         results.data.forEach(oferta => {
           if (oferta.titulo && oferta.enlace) {
             const card = document.createElement("div");
-            card.className = "bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition";
-            card.innerHTML = `
-              <h2 class="text-xl font-semibold mb-2">${oferta.titulo}</h2>
-              <p class="text-gray-600 mb-2">${oferta.descripcion || ""}</p>
-              <p class="text-sm text-gray-400 mb-4">🗓 ${oferta.fecha || ""}</p>
-              <a href="${oferta.enlace}" target="_blank" class="inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Ver oferta</a>
-            `;
+            card.className = "bg-white rounded-lg shadow p-4 hover:shadow-md transition text-sm";
+card.innerHTML = `
+  <h2 class="text-base font-semibold mb-1">${oferta.titulo}</h2>
+  <p class="text-gray-600 mb-1">${oferta.descripcion || ""}</p>
+  <p class="text-xs text-gray-400 mb-3">🗓 ${oferta.fecha || ""}</p>
+  <a href="${oferta.enlace}" target="_blank" class="inline-block bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition text-sm">Ver oferta</a>
+`;
+
             container.appendChild(card);
           }
         });
