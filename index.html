@@ -88,7 +88,7 @@
           });
         };
 
-        const ordenadas = [...ofertas].sort((a, b) => parseFecha(b.fecha) - parseFecha(a.fecha));
+        const ordenadas = [...ofertas];
         render(ordenadas);
 
         search.addEventListener("input", (e) => {
@@ -97,7 +97,7 @@
             oferta.titulo.toLowerCase().includes(q) ||
             oferta.descripcion.toLowerCase().includes(q)
           );
-          const ordenadas = [...filtradas].sort((a, b) => parseFecha(b.fecha) - parseFecha(a.fecha));
+          const ordenadas = [...filtradas];
           render(ordenadas);
         });
       })
