@@ -1,115 +1,151 @@
-<script>
-  const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv";
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OfertasZ - Las Mejores Ofertas Diarias</title>
+  <meta name="monetag" content="e8fe6dfaa80fb9c45bf655ac5e43c336">
+  <link rel="icon" href="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.ico" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Outfit', sans-serif; }
+    .popup, .popup-overlay { display: none; }
+    .favorite { color: gold; }
+    .pagination button { @apply px-3 py-1 border rounded mx-1; }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-gray-900 to-black text-white min-h-screen">
 
-  const agregarAfiliado = (url) => {
-    if (!url) return "#";
-    if (url.includes("/go?id=")) return url;
-    if (!url.includes("amazon.")) return url;
-    const tieneTag = url.includes("tag=");
-    return tieneTag ? url : url + (url.includes("?") ? "&" : "?") + "tag=imadinho0c-21";
-  };
+  <!-- Banner superior -->
+  <div class="bg-yellow-500 text-black text-center py-2 text-sm font-bold">
+    🤑 ¡Nuevas ofertas cada hora! Activa las notificaciones para no perderte nada.
+  </div>
 
-  const cerrarPopup = () => {
-    document.getElementById("popupOverlay").style.display = "none";
-    document.getElementById("popup").style.display = "none";
-  };
+  <!-- Header principal -->
+  <header class="text-center py-8">
+    <img src="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.png" alt="OfertasZ logo" class="mx-auto h-20 w-20 rounded-full shadow-lg" />
+    <h1 class="text-4xl font-extrabold mt-4 tracking-tight">OfertasZ</h1>
+    <p class="text-gray-300 text-sm">Tecnología, descuentos y locuras en un solo lugar 🧨</p>
+  </header>
 
-  const toggleFavorito = (url, el) => {
-    let favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
-    if (favoritos.includes(url)) {
-      favoritos = favoritos.filter(f => f !== url);
-      el.classList.remove("favorite");
-    } else {
-      favoritos.push(url);
-      el.classList.add("favorite");
-    }
-    localStorage.setItem("favoritos", JSON.stringify(favoritos));
-    render(currentPage);
-  };
+  <main class="max-w-7xl mx-auto px-4">
+    <!-- Buscador y botones -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <input type="text" id="search" placeholder="🔍 Buscar ofertas..." class="flex-1 px-4 py-2 rounded border border-gray-600 bg-gray-800 text-white" />
+      <button onclick="verFavoritos()" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded font-semibold">⭐ Ver Favoritos</button>
+    </div>
 
-  let ofertas = [];
-  let currentPage = 1;
-  const itemsPerPage = 20;
+    <!-- Ofertas -->
+    <div id="ofertas" class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"></div>
 
-  const renderPagination = (totalPages) => {
-    const paginador = document.getElementById("pagination");
-    paginador.innerHTML = "";
-    for (let i = 1; i <= totalPages; i++) {
-      const btn = document.createElement("button");
-      btn.className = `px-3 py-1 rounded ${i === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white'} mx-1`;
-      btn.textContent = i;
-      btn.onclick = () => {
-        currentPage = i;
-        render(currentPage);
-      };
-      paginador.appendChild(btn);
-    }
-  };
+    <!-- Paginación -->
+    <div class="pagination text-center mt-6" id="pagination"></div>
+  </main>
 
-  const render = (page) => {
-    const contenedor = document.getElementById("ofertas");
-    contenedor.innerHTML = "";
-    const favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
+  <footer class="text-center text-gray-500 text-sm py-8">
+    Hecho con ❤️ por OfertasZ · <a href="https://www.profitableratecpm.com/m8cy5uamn?key=3167f395abf1b5799d89f05a7e5e710f" target="_blank" class="underline text-green-400 hover:text-green-500">Visita nuestro mejor chollo</a>
+  </footer>
 
-    const start = (page - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const pageItems = ofertas.slice(start, end);
+  <!-- Popup destacado -->
+  <div class="popup-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 z-40" id="popupOverlay"></div>
+  <div class="popup fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-black rounded-xl p-6 shadow-lg z-50 max-w-xs w-full" id="popup">
+    <h2 class="text-lg font-bold mb-2">🎯 Oferta destacada</h2>
+    <p class="mb-4">No te pierdas este chollo exclusivo que acabamos de encontrar.</p>
+    <a id="popupLink" href="#" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mr-2">🔥 Ir a la oferta</a>
+    <button onclick="cerrarPopup()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Cerrar</button>
+  </div>
 
-    pageItems.forEach((o, i) => {
-      const img = o.imagen && o.imagen.startsWith("http") ? o.imagen : "https://via.placeholder.com/300x200.png?text=Sin+imagen";
-      const card = document.createElement("div");
-      card.className = "bg-white dark:bg-gray-800 rounded-lg shadow p-3 hover:shadow-xl transition text-sm flex flex-col justify-between relative";
-      const isFav = favoritos.includes(o.enlace);
-      card.innerHTML = `
-        <button class="absolute top-2 right-2 text-xl ${isFav ? 'favorite' : ''}" onclick="toggleFavorito('${o.enlace}', this)">★</button>
-        <div class="mb-2 h-28 flex items-center justify-center overflow-hidden rounded bg-gray-200 dark:bg-gray-700">
-          <img src="${img}" alt="Imagen de la oferta" class="object-contain h-full w-full">
+  <script>
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv";
+    const agregarAfiliado = (url) => url.includes("amazon") && !url.includes("tag=") ? url + (url.includes("?") ? "&" : "?") + "tag=imadinho0c-21" : url;
+
+    let todasLasOfertas = [], ofertasPaginadas = [], paginaActual = 1, porPagina = 20;
+    let popupMostrado = false;
+
+    fetch(SHEET_URL)
+      .then(res => res.text())
+      .then(data => {
+        const rows = data.trim().split("\n").slice(1);
+        todasLasOfertas = rows.map(row => {
+          const cols = row.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(c => c.replace(/^"|"$/g, "").trim());
+          const [titulo, enlace, descripcion = "", fecha = "", imagen = ""] = cols;
+          return { titulo, enlace, descripcion, fecha, imagen };
+        }).filter(o => o.titulo && o.enlace).reverse();
+
+        renderOfertas();
+        if (!popupMostrado) setTimeout(() => mostrarPopup(todasLasOfertas.find(o => o.enlace.includes("amazon"))), 5000);
+      });
+
+    function renderOfertas() {
+      const contenedor = document.getElementById("ofertas");
+      const search = document.getElementById("search").value.toLowerCase();
+      const favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
+      let filtradas = todasLasOfertas.filter(o => o.titulo.toLowerCase().includes(search) || o.descripcion.toLowerCase().includes(search));
+      const totalPaginas = Math.ceil(filtradas.length / porPagina);
+      paginaActual = Math.min(paginaActual, totalPaginas);
+      ofertasPaginadas = filtradas.slice((paginaActual - 1) * porPagina, paginaActual * porPagina);
+
+      contenedor.innerHTML = ofertasPaginadas.map((o, i) => `
+        <div class="bg-gray-800 rounded-lg shadow p-4 relative flex flex-col justify-between">
+          <button class="absolute top-2 right-2 text-xl ${favoritos.includes(o.enlace) ? 'favorite' : ''}" onclick="toggleFavorito('${o.enlace}', this)">★</button>
+          <img src="${o.imagen?.startsWith("http") ? o.imagen : 'https://via.placeholder.com/300x200?text=Sin+imagen'}" alt="Imagen" class="object-contain h-40 w-full rounded mb-3" />
+          <h2 class="text-base font-bold mb-1">${o.titulo}</h2>
+          <p class="text-sm text-gray-400 mb-2 line-clamp-3">${o.descripcion}</p>
+          <a href="${agregarAfiliado(o.enlace)}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-center mt-auto">🛒 Ver oferta</a>
         </div>
-        <h2 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2">${o.titulo}</h2>
-        <div class="text-xs text-gray-600 dark:text-gray-300 flex-grow max-h-20 overflow-y-auto">${o.descripcion}</div>
-        <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 mb-1 italic">📅 ${o.fecha || ""}</p>
-        <a href="${agregarAfiliado(o.enlace)}" target="_blank" class="inline-block text-center bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition text-xs font-medium">🛒 Ver oferta</a>
-      `;
-      contenedor.appendChild(card);
+      `).join("");
+
+      document.getElementById("pagination").innerHTML = Array.from({ length: totalPaginas }, (_, i) => `
+        <button onclick="cambiarPagina(${i + 1})" class="${paginaActual === i + 1 ? 'bg-green-600 text-white' : 'bg-gray-700 text-white'} px-3 py-1 rounded mx-1">${i + 1}</button>
+      `).join("");
+    }
+
+    function cambiarPagina(pag) {
+      paginaActual = pag;
+      renderOfertas();
+    }
+
+    function toggleFavorito(url, el) {
+      let favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
+      if (favoritos.includes(url)) favoritos = favoritos.filter(f => f !== url);
+      else favoritos.push(url);
+      localStorage.setItem("favoritos", JSON.stringify(favoritos));
+      el.classList.toggle("favorite");
+    }
+
+    function verFavoritos() {
+      todasLasOfertas = todasLasOfertas.filter(o => (JSON.parse(localStorage.getItem("favoritos") || "[]")).includes(o.enlace));
+      paginaActual = 1;
+      renderOfertas();
+    }
+
+    function mostrarPopup(oferta) {
+      if (!oferta) return;
+      popupMostrado = true;
+      document.getElementById("popupLink").href = agregarAfiliado(oferta.enlace);
+      document.getElementById("popupOverlay").style.display = "block";
+      document.getElementById("popup").style.display = "block";
+    }
+
+    function cerrarPopup() {
+      document.getElementById("popupOverlay").style.display = "none";
+      document.getElementById("popup").style.display = "none";
+    }
+
+    document.getElementById("search").addEventListener("input", () => {
+      paginaActual = 1;
+      renderOfertas();
     });
-    renderPagination(Math.ceil(ofertas.length / itemsPerPage));
-  };
 
-  const mostrarPopup = (oferta) => {
-    const popup = document.getElementById("popup");
-    popup.querySelector("a").href = agregarAfiliado(oferta.enlace);
-    document.getElementById("popupOverlay").style.display = "block";
-    popup.style.display = "block";
-  };
-
-  fetch(SHEET_URL)
-    .then((res) => res.text())
-    .then((data) => {
-      const rows = data.trim().split("\n").slice(1);
-      ofertas = rows.map(row => {
-        const cols = row.split(/,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/).map(c => c.replace(/^\"|\"$/g, "").trim());
-        const [titulo, enlace, descripcion = "", fecha = "", imagen = ""] = cols;
-        return { titulo, enlace, descripcion, fecha, imagen };
-      }).filter(o => o.titulo && o.enlace).reverse();
-
-      currentPage = 1;
-      render(currentPage);
-      mostrarPopup(ofertas[0]);
-    })
-    .catch((err) => {
-      document.getElementById("ofertas").innerHTML = "<p class='text-red-500'>No se pudieron cargar las ofertas.</p>";
-      console.error("Error cargando CSV:", err);
-    });
-</script>
-
-<!-- Popup HTML actualizado -->
-<div class="popup-overlay" id="popupOverlay"></div>
-<div class="popup" id="popup">
-  <h2 class="text-lg font-bold mb-2">🎯 Oferta destacada</h2>
-  <p class="mb-4">No te pierdas este chollo exclusivo que acabamos de encontrar.</p>
-  <a href="#" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mb-2 w-full text-center">🔥 Ir a la oferta</a>
-  <button onclick="cerrarPopup()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded w-full">Cerrar</button>
-</div>
-
-<!-- Paginador -->
-<div class="flex justify-center mt-6" id="pagination"></div>
+    // Push notifications
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          new Notification("🎉 Notificaciones activadas!", { body: "Te avisaremos con los mejores chollos." });
+        }
+      });
+    }
+  </script>
+</body>
+</html>
