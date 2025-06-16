@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>OfertasZ</title>
 
-  <!-- Simple Analytics (puedes cambiar por Google Analytics si quieres) -->
+  <!-- Favicon del logo -->
+  <link rel="icon" href="https://i.imgur.com/rB4J0Uq.png" type="image/png">
+
+  <!-- Simple Analytics -->
   <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 
   <style>
@@ -28,6 +31,14 @@
     header h1 {
       margin: 0;
       font-size: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header h1 img {
+      height: 32px;
+      width: 32px;
     }
 
     .buscador {
@@ -157,7 +168,9 @@
 </head>
 <body>
   <header>
-    <h1>🔥 OfertasZ</h1>
+    <h1>
+      <img src="https://i.imgur.com/rB4J0Uq.png" alt="Logo OfertasZ"> 🔥 OfertasZ
+    </h1>
     <div class="acciones">
       <button onclick="mostrarFavoritos()">⭐ Ver favoritos</button>
       <input class="buscador" type="text" placeholder="Buscar chollo..." oninput="filtrarOfertas(this.value)">
@@ -273,7 +286,7 @@
     }
 
     function redirigir() {
-      const url = "https://www.amazon.es/dp/B09FYV8B9Q/?tag=imadinho0c-21";
+      const url = "https://www.amazon.es/dp/B0CWXNS552/?tag=imadinho0c-21";
       window.open(url, "_blank");
     }
 
