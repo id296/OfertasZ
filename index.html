@@ -15,30 +15,86 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    :root {
-      --bg: #0f172a; --card-bg: #1e293b; --text: #f8fafc;
-      --accent: #10b981; --highlight: #f59e0b;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Rubik',sans-serif; }
-    body { background:var(--bg); color:var(--text); min-height:100vh; padding:1rem; }
-    header { display:flex; justify-content:space-between; align-items:center; padding-bottom:1rem; }
-    h1 { font-size:2rem; color:var(--accent); }
-    .btn-toggle { background:var(--highlight); border:none; padding:0.5rem 1rem; border-radius:8px; cursor:pointer; font-weight:bold; color:#000; }
-    #buscador { width:100%; padding:0.7rem 1rem; border-radius:10px; border:none; margin:1rem 0; font-size:1rem; }
-    #ofertas-container { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
-    .tarjeta { background:var(--card-bg); border-radius:12px; padding:1rem; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 12px rgba(0,0,0,0.5); transition:transform 0.2s; }
-    .tarjeta:hover { transform:translateY(-8px); }
-    .tarjeta img { width:100%; height:140px; object-fit:contain; margin-bottom:0.8rem; border-radius:8px; }
-    .tarjeta h2 { font-size:1.1rem; margin-bottom:0.5rem; color:var(--accent); }
-    .tarjeta p { font-size:0.85rem; flex-grow:1; margin-bottom:0.8rem; color:#cbd5e0; }
-    .acciones { display:flex; justify-content:space-between; align-items:center; margin-top:auto; }
-    .boton { background:var(--accent); border:none; padding:0.5rem 0.8rem; border-radius:8px; color:#000; cursor:pointer; font-weight:bold; }
-    .estrella { cursor:pointer; font-size:1.2rem; color:#888; transition:color 0.2s; }
-    .estrella.activa { color:var(--highlight); }
-    .paginacion { text-align:center; margin:1.5rem 0; }
-    .paginacion button { background:var(--accent); border:none; margin:0 0.3rem; padding:0.6rem 1rem; border-radius:8px; cursor:pointer; font-weight:bold; }
-    footer { text-align:center; margin-top:2rem; font-size:0.8rem; color:#94a3b8; }
-  </style>
+  body {
+    background: #0d1117;
+    color: #c9d1d9;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 1rem;
+  }
+
+  .contenedor {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .tarjeta {
+    display: flex;
+    flex-direction: column;
+    background: #161b22;
+    border-radius: 10px;
+    padding: 0.75rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+    height: 100%;
+  }
+
+  .tarjeta:hover {
+    transform: scale(1.02);
+  }
+
+  .tarjeta img {
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+  }
+
+  .tarjeta h2 {
+    font-size: 0.85rem;
+    margin: 0 0 0.2rem;
+    color: #58a6ff;
+  }
+
+  .tarjeta p {
+    font-size: 0.75rem;
+    flex-grow: 1;
+    margin: 0;
+    overflow: hidden;
+    max-height: 3.5em;
+    line-height: 1.2em;
+  }
+
+  .acciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .boton {
+    background: #238636;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.7rem;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .estrella {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #555;
+    transition: color 0.2s;
+  }
+
+  .estrella.activa {
+    color: gold;
+  }
+</style>
+
 </head>
 <body>
 
