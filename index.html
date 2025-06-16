@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>🔥 OfertasZ</title>
-<link rel="icon" href="https://i.imgur.com/rB4J0Uq.png"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OfertasZ</title>
+<link rel="icon" href="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.ico">
 <style>
-  :root { --bg:#121212;--card:#1f1f1f;--accent:#00c853;--highlight:gold;--text:#fff; }
-  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{--bg:#121212;--card:#1f1f1f;--accent:#00c853;--text:#fff;--highlight:gold;}
+  *,*:before,*:after{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:sans-serif;}
   header{display:flex;justify-content:space-between;align-items:center;padding:1rem;background:#1e1e1e;}
   .acciones{display:flex;gap:.5rem;}
-  .acciones input{padding:.5rem;border:none;border-radius:4px;width:200px;}
-  .acciones button{padding:.5rem;border:none;border-radius:4px;background:var(--highlight);cursor:pointer;}
+  .acciones input{padding:.5rem;border-radius:4px;border:none;}
+  .acciones button{padding:.5rem;border:none;border-radius:4px;background:var(--highlight);cursor:pointer;color:#000;}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.5rem;padding:1rem;}
-  .tarjeta{background:var(--card);border-radius:6px;padding:.5rem;display:flex;flex-direction:column;justify-content:space-between;position:relative;height:260px;}
+  .tarjeta{background:var(--card);padding:.5rem;border-radius:6px;position:relative;height:260px;display:flex;flex-direction:column;justify-content:space-between;}
   .tarjeta img{width:100%;height:100px;object-fit:contain;margin-bottom:.3rem;}
-  .tarjeta h3{font-size:1rem;color:#4caf50;margin:.2rem 0;}
+  .tarjeta h3{font-size:1rem;color:#4caf50;}
   .tarjeta p{font-size:.85rem;flex-grow:1;overflow:hidden;}
-  .boton{background:var(--accent);color:#000;padding:.4rem;border:none;border-radius:4px;cursor:pointer;}
+  .boton{background:var(--accent);border:none;border-radius:4px;padding:.4rem;cursor:pointer;color:#000;}
   .estrella{position:absolute;bottom:5px;right:5px;font-size:1.1rem;color:#777;cursor:pointer;}
   .estrella.fav{color:var(--highlight);}
   .pags{padding:1rem;text-align:center;}
-  .pags button{margin:.2rem;padding:.4rem .8rem;border:none;border-radius:4px;background:var(--accent);color:#000;cursor:pointer;}
-  #popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;}
+  .pags button{margin:.2rem;border:none;border-radius:4px;background:var(--accent);padding:.4rem .8rem;cursor:pointer;color:#000;}
+  #popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;justify-content:center;align-items:center;}
   #popup .c{background:var(--card);padding:1rem;border-radius:8px;text-align:center;}
   #popup button{margin:.5rem;padding:.5rem 1rem;border:none;border-radius:4px;cursor:pointer;}
   #popup .ok{background:var(--accent);color:#000;}
@@ -33,23 +33,20 @@
 </style>
 </head>
 <body>
-
 <header>
-  <h1>🔥 OfertasZ</h1>
+  <h1><img src="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.png" alt="Logo" width="32"> 🔥 OfertasZ</h1>
   <div class="acciones">
     <button onclick="toggleFavs()">⭐ Favoritos</button>
     <input id="busca" type="text" placeholder="Buscar chollo..." oninput="filtrar(this.value)">
   </div>
 </header>
 
-<!-- Native Ad banner -->
 <script async data-cfasync="false" src="//pl26928600.profitableratecpm.com/127e1bd4761db0b286576565e38dfc6b/invoke.js"></script>
 <div id="container-127e1bd4761db0b286576565e38dfc6b"></div>
 
 <div class="grid" id="grid"></div>
 <div class="pags" id="pages"></div>
 
-<!-- Popup destacado -->
 <div id="popup">
   <div class="c">
     <p>🎁 Oferta destacada</p>
@@ -58,49 +55,48 @@
   </div>
 </div>
 
-<!-- Monetización Direct Link oculto y visible -->
 <iframe src="https://www.profitableratecpm.com/m8cy5uamn?key=3167f395abf1b5799d89f05a7e5e710f" style="display:none"></iframe>
-<footer><a href="https://www.profitableratecpm.com/m8cy5uamn?key=3167f395abf1b5799d89f05a7e5e710f" target="_blank">👉 Enlace Directo Especial</a></footer>
+<footer><a href="https://www.profitableratecpm.com/m8cy5uamn?key=3167f395abf1b5799d89f05a7e5e710f" target="_blank">👉 Direct Link monetizado</a></footer>
+
+<script src="sw%20(3).js"></script>
+<script src="go.html"></script>
 
 <script>
-const SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv";
+const SHEET="https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv";
 const TAG="imadinho0c-21", PER=20;
 let all=[], filt=[], page=1, favOnly=false;
 
 fetch(SHEET)
   .then(r=>r.text())
   .then(txt=>{
-    all = txt.trim().split("\n").slice(1).map(r=>{
-      const [t,u,d,f,i] = r.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(c=>c.replace(/^"|"$/g,""));
-      return {t,u,d,i};
+    all = txt.split("\n").slice(1).map(r=>{
+      const [t,u,,d,i] = r.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
+      return {t:u?t.trim():"", u:u.trim(), d:d?.trim(), i:i?.trim()};
     }).filter(o=>o.t&&o.u).reverse();
     filt=[...all];
-    render();
-    setTimeout(()=>document.getElementById('popup').style.display='flex',1500);
-  })
-  .catch(console.error);
+    render(); setTimeout(()=>document.getElementById('popup').style.display='flex',1500);
+  }).catch(console.error);
 
 function render(){
-  const grid=document.getElementById('grid'), start=(page-1)*PER, slice=filt.slice(start,start+PER);
-  grid.innerHTML=slice.map(o=>`
+  const grid=document.getElementById('grid'), s=(page-1)*PER;
+  grid.innerHTML=filt.slice(s,s+PER).map(o=>`
     <div class="tarjeta">
       <img src="${o.i||'https://via.placeholder.com/200'}">
-      <h3>${o.t}</h3>
-      <p>${o.d||''}</p>
-      <button class="boton" onclick="window.open('${o.u}','_blank')">Ver oferta</button>
+      <h3>${o.t}</h3><p>${o.d||''}</p>
+      <button class="boton" onclick="window.open(genLink('${o.u}'))">Ver oferta</button>
       <span class="estrella ${JSON.parse(localStorage.getItem('favs')||'[]').includes(o.u)?'fav':''}"
         onclick="togFav('${o.u}',this)">★</span>
     </div>`).join('');
-  const pages = Math.ceil(filt.length/PER);
-  document.getElementById('pages').innerHTML =
-    Array.from({length:pages},(_,i)=>`<button onclick="go(${i+1})">${i+1}</button>`).join('');
+  const pages=Math.ceil(filt.length/PER);
+  document.getElementById('pages').innerHTML=Array.from({length:pages},(_,i)=>`<button onclick="pg(${i+1})">${i+1}</button>`).join('');
 }
 
-function go(n){page=n; render();}
-function togFav(u, el){
+function pg(n){page=n; render();}
+function togFav(u,el){
   let arr=JSON.parse(localStorage.getItem('favs')||'[]');
-  arr.includes(u)?arr=arr.filter(x=>x!==u)&el.classList.remove('fav'):arr.push(u)&el.classList.add('fav');
-  localStorage.setItem('favs', JSON.stringify(arr));
+  if(arr.includes(u)){arr=arr.filter(x=>x!==u); el.classList.remove('fav')}
+  else{arr.push(u); el.classList.add('fav')}
+  localStorage.setItem('favs',JSON.stringify(arr));
 }
 function toggleFavs(){
   favOnly=!favOnly;
@@ -108,16 +104,17 @@ function toggleFavs(){
   page=1; render();
 }
 function filtrar(q){
-  filt=all.filter(o=>o.t.toLowerCase().includes(q.toLowerCase())||(o.d&&o.d.toLowerCase().includes(q.toLowerCase())));
+  filt=all.filter(o=>o.t.toLowerCase().includes(q)||o.d.toLowerCase().includes(q));
   page=1; render();
 }
 function cerrar(){document.getElementById('popup').style.display='none'}
+function genLink(u){
+  return u.includes("amazon.")?u+(u.includes('?')?'&':'?')+"tag="+TAG:u;
+}
 function redir(){
-  const primeiro = all[0]; 
-  const url = primeiro.u.includes('amazon.') ? primeiro.u + (primeiro.u.includes('?')?'&':'?') + 'tag='+TAG : primeiro.u;
-  window.open(url,'_blank');
+  const u=all[0].u;
+  window.open(genLink(u),"")
 }
 </script>
-
 </body>
 </html>
