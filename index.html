@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>OfertasZ</title>
 
-  <!-- Favicon del logo -->
+  <!-- Favicon -->
   <link rel="icon" href="https://i.imgur.com/rB4J0Uq.png" type="image/png">
 
   <!-- Simple Analytics -->
@@ -93,6 +93,7 @@
       cursor: pointer;
       font-size: 0.9rem;
       margin-top: 0.5rem;
+      text-align: center;
     }
 
     .estrella {
@@ -139,7 +140,6 @@
     }
 
     #popup .cerrar {
-      margin-top: 1rem;
       background: #555;
     }
 
@@ -193,8 +193,15 @@
     </div>
   </div>
 
-  <!-- Monetización directa -->
+  <!-- Direct Link oculto -->
   <iframe src="https://www.profitableratecpm.com/m8cy5uamn?key=3167f395abf1b5799d89f05a7e5e710f" style="display:none;"></iframe>
+
+  <!-- Direct Link visible -->
+  <footer style="text-align:center; padding:1rem;">
+    <a href="https://www.profitableratecpm.com/m8cy5uamn?key=3167f395abf1b5799d89f05a7e5e710f" target="_blank" style="color:gold; text-decoration:underline;">
+      👉 Visita nuestro Direct Link especial
+    </a>
+  </footer>
 
   <script>
     const urlSheet = "https://opensheet.elk.sh/1QmDXF5uXfEIx2V-2qkYJy8zSAhW52MW868VLEqmlSKk/Hoja%201";
@@ -205,7 +212,7 @@
     async function cargarOfertas() {
       const res = await fetch(urlSheet);
       const datos = await res.json();
-      todas = datos;
+      todas = datos.reverse();
       mostrarOfertas();
     }
 
@@ -234,10 +241,6 @@
         boton.target = "_blank";
         boton.className = "boton";
         boton.textContent = "Ver oferta";
-
-        boton.addEventListener("click", () => {
-          console.log("Click en oferta:", oferta.titulo);
-        });
 
         const estrella = document.createElement("span");
         estrella.className = "estrella" + (localStorage.getItem(oferta.url) ? " fav" : "");
