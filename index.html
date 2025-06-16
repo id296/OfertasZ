@@ -37,31 +37,39 @@
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-gray-100 to-gray-300 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 font-sans">
+<body class="bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-sans">
 
-  <div id="container-127e1bd4761db0b286576565e38dfc6b"></div>
-  <script async="async" data-cfasync="false" src="//pl26928600.profitableratecpm.com/127e1bd4761db0b286576565e38dfc6b/invoke.js"></script>
+  <!-- Banner Monetag -->
+  <div class="mx-auto max-w-7xl px-4 pt-4">
+    <script async="async" data-cfasync="false" src="//pl26928600.profitableratecpm.com/127e1bd4761db0b286576565e38dfc6b/invoke.js"></script>
+    <div id="container-127e1bd4761db0b286576565e38dfc6b"></div>
+  </div>
 
   <header class="text-center py-6">
-    <img src="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.png" alt="OfertasZ logo" class="mx-auto h-16 w-16 rounded-full" />
-    <h1 class="text-3xl font-extrabold mt-2">OfertasZ</h1>
-    <p class="text-sm text-gray-500 dark:text-gray-400">Las mejores ofertas actualizadas automáticamente</p>
+    <img src="Lucid_Realism_A_sleek_modern_logo_for_OfertasZ_a_tech_deals_we_1.png" alt="OfertasZ logo" class="mx-auto h-20 w-20 rounded-full shadow" />
+    <h1 class="text-4xl font-black mt-2 tracking-tight">OfertasZ</h1>
+    <p class="text-sm text-zinc-500 dark:text-zinc-400">Encuentra chollos irresistibles, actualizados cada hora.</p>
   </header>
 
   <main class="max-w-7xl mx-auto px-4">
-    <input type="text" id="search" placeholder="🔍 Buscar ofertas..." class="w-full mb-6 px-4 py-2 rounded border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white text-sm" />
-    <div id="ofertas" class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"></div>
+    <input type="text" id="search" placeholder="🔍 Buscar ofertas por nombre o descripción..." class="w-full mb-6 px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
+    <div id="ofertas" class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"></div>
   </main>
 
-  <footer class="text-center text-gray-500 dark:text-gray-400 text-sm py-6">
-    Hecho con ❤️ por OfertasZ · <a href="https://www.profitableratecpm.com/m8cy5uamn?key=3167f395abf1b5799d89f05a7e5e710f" target="_blank" class="underline text-green-600 hover:text-green-700">👉 Visita nuestro mejor chollo</a>
+  <footer class="text-center text-zinc-500 dark:text-zinc-400 text-sm py-6">
+    Hecho con ❤️ por OfertasZ · 
+    <a href="https://www.profitableratecpm.com/m8cy5uamn?key=3167f395abf1b5799d89f05a7e5e710f" target="_blank" class="underline text-green-600 hover:text-green-700">👉 Mira nuestra mejor oferta del día</a>
   </footer>
 
+  <!-- Popup destacado -->
   <div class="popup-overlay" id="popupOverlay"></div>
   <div class="popup" id="popup">
     <h2 class="text-lg font-bold mb-2">🎯 Oferta destacada</h2>
-    <p class="mb-4">No te pierdas este chollo exclusivo que acabamos de encontrar.</p>
-    <button onclick="cerrarPopup()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded">Cerrar</button>
+    <p class="mb-4">Haz clic abajo para ver una súper oferta recomendada por nuestro equipo:</p>
+    <a href="https://www.profitableratecpm.com/m8cy5uamn?key=3167f395abf1b5799d89f05a7e5e710f" target="_blank" class="block text-center bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded mb-4">🔥 Ver Oferta Ahora</a>
+    <script async="async" data-cfasync="false" src="//pl26928600.profitableratecpm.com/127e1bd4761db0b286576565e38dfc6b/invoke.js"></script>
+    <div id="container-127e1bd4761db0b286576565e38dfc6b"></div>
+    <button onclick="cerrarPopup()" class="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 mt-4 rounded">Cerrar</button>
   </div>
 
   <script>
@@ -86,18 +94,17 @@
     };
 
     fetch(SHEET_URL)
-      .then((res) => res.text())
-      .then((data) => {
+      .then(res => res.text())
+      .then(data => {
         const rows = data.trim().split("\n").slice(1);
         const ofertas = rows.map(row => {
-          const cols = row.split(/,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/).map(c => c.replace(/^\"|\"$/g, "").trim());
+          const cols = row.split(/,(?=(?:[^"]*\"[^"]*\")*[^"]*$)/).map(c => c.replace(/^\"|\"$/g, "").trim());
           const [titulo, enlace, descripcion = "", fecha = "", imagen = ""] = cols;
           return { titulo, enlace, descripcion, fecha, imagen };
         }).filter(o => o.titulo && o.enlace);
 
         const contenedor = document.getElementById("ofertas");
         const search = document.getElementById("search");
-
         const favoritos = JSON.parse(localStorage.getItem("favoritos") || "[]");
 
         const render = (lista) => {
@@ -105,21 +112,19 @@
           lista.forEach((o, i) => {
             const img = o.imagen && o.imagen.startsWith("http") ? o.imagen : "https://via.placeholder.com/300x200.png?text=Sin+imagen";
             const card = document.createElement("div");
-            card.className = "bg-white dark:bg-gray-800 rounded-lg shadow p-3 hover:shadow-xl transition text-sm flex flex-col justify-between relative";
+            card.className = "bg-white dark:bg-zinc-800 rounded-xl shadow-lg p-4 flex flex-col justify-between relative hover:ring-2 hover:ring-green-500 transition";
 
             const isFav = favoritos.includes(o.enlace);
 
             card.innerHTML = `
-              <button class="absolute top-2 right-2 text-xl ${isFav ? 'favorite' : ''}" data-index="${i}" onclick="toggleFavorito('${o.enlace}', this)">★</button>
-              <div class="mb-2 h-28 flex items-center justify-center overflow-hidden rounded bg-gray-200 dark:bg-gray-700">
+              <button class="absolute top-2 right-2 text-xl ${isFav ? 'favorite' : ''}" onclick="toggleFavorito('${o.enlace}', this)">★</button>
+              <div class="mb-2 h-36 flex items-center justify-center overflow-hidden rounded bg-zinc-200 dark:bg-zinc-700">
                 <img src="${img}" alt="Imagen de la oferta" class="object-contain h-full w-full">
               </div>
-              <h2 class="text-sm font-bold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2">${o.titulo}</h2>
-              <div class="text-xs text-gray-600 dark:text-gray-300 flex-grow max-h-20 overflow-y-auto">${o.descripcion}</div>
-              <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 mb-1 italic">📅 ${o.fecha || ""}</p>
-              <a href="${agregarAfiliado(o.enlace)}" target="_blank" class="inline-block text-center bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition text-xs font-medium">
-                🛒 Ver oferta
-              </a>
+              <h2 class="text-base font-semibold text-zinc-800 dark:text-zinc-100 mb-1 line-clamp-2">${o.titulo}</h2>
+              <div class="text-sm text-zinc-600 dark:text-zinc-300 flex-grow max-h-24 overflow-y-auto">${o.descripcion}</div>
+              <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-2 italic">📅 ${o.fecha || ""}</p>
+              <a href="${agregarAfiliado(o.enlace)}" target="_blank" class="mt-2 block text-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm font-bold">🛒 Ver oferta</a>
             `;
             contenedor.appendChild(card);
           });
@@ -135,7 +140,6 @@
           render([...filtradas].reverse());
         });
 
-        // Mostrar popup destacado 5s después de cargar
         setTimeout(() => mostrarPopup(), 5000);
       })
       .catch((err) => {
