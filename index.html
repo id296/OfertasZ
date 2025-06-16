@@ -82,22 +82,23 @@
       renderPagination();
     }
 
-    function tarjetaHTML(o) {
-      const img = o.imagen?.startsWith("http") ? o.imagen : 'https://via.placeholder.com/250';
-      const favs = JSON.parse(localStorage.getItem("favs")||"[]");
-      const isFav = favs.includes(o.url);
-      return `
-        <div class="tarjeta">
-          <img src="${img}" alt="Imagen oferta" />
-          <h2>${o.titulo}</h2>
-          <p>${o.descripcion || ""}</p>
-          <div class="acciones">
-            <button class="boton" onclick="ir('${o.url}')">Ver oferta</button>
-            <span class="estrella ${isFav? 'activa':''}" onclick="toggleFav(this,'${o.url}')">★</span>
-          </div>
-        </div>
-      `;
-    }
+  function tarjetaHTML(o) {
+  const img = o.imagen?.startsWith("http") ? o.imagen : 'https://via.placeholder.com/250x250?text=Oferta';
+  const favs = JSON.parse(localStorage.getItem("favs") || "[]");
+  const isFav = favs.includes(o.url);
+  return `
+    <div class="tarjeta" style="padding:0.5rem; font-size: 0.75rem; height: 280px;">
+      <img src="${img}" alt="Imagen oferta" style="height:100px; margin-bottom:0.5rem;" />
+      <h2 style="font-size: 0.85rem; margin-bottom:0.2rem; line-height:1.1;">${o.titulo}</h2>
+      <p style="flex-grow:1; overflow:hidden; max-height:45px;">${o.descripcion || ""}</p>
+      <div class="acciones" style="margin-top:0.5rem;">
+        <button class="boton" onclick="ir('${o.url}')">Ver oferta</button>
+        <span class="estrella ${isFav ? 'activa' : ''}" onclick="toggleFav(this,'${o.url}')">★</span>
+      </div>
+    </div>
+  `;
+}
+
 
     function renderPagination() {
       const total = Math.ceil(ofertas.length / PER_PAGE);
