@@ -2,203 +2,291 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OfertasZ - Chollos Premium 🚀</title>
-  <meta name="description" content="Encuentra las mejores ofertas y chollos de Amazon, Chollometro y más, actualizadas al instante. Ahorra dinero todos los días con OfertasZ!">
-  <meta property="og:title" content="OfertasZ - Chollos Premium 🚀">
-  <meta property="og:description" content="Encuentra las mejores ofertas y chollos de Amazon, Chollometro y más, actualizadas al instante.">
-  <meta property="og:image" content="https://emoji.gg/assets/emoji/9146-deal.png">
-  <meta name="monetag" content="e8fe6dfaa80fb9c45bf655ac5e43c336">
-  <link rel="icon" href="https://emoji.gg/assets/emoji/9146-deal.png" />
-  <link rel="manifest" href="manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OfertasZ</title>
+
+  <!-- Simple Analytics (puedes cambiar por Google Analytics si quieres) -->
+  <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+
   <style>
-  body {
-    background: #0d1117;
-    color: #c9d1d9;
-    font-family: sans-serif;
-    margin: 0;
-    padding: 1rem;
-  }
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-  .contenedor {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
-  }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #1e1e1e;
+      padding: 1rem;
+    }
 
-  .tarjeta {
-    display: flex;
-    flex-direction: column;
-    background: #161b22;
-    border-radius: 10px;
-    padding: 0.75rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    transition: transform 0.2s;
-    height: 100%;
-  }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
 
-  .tarjeta:hover {
-    transform: scale(1.02);
-  }
+    .buscador {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: none;
+    }
 
-  .tarjeta img {
-    height: 100px;
-    object-fit: contain;
-    margin-bottom: 0.5rem;
-    border-radius: 6px;
-  }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
 
-  .tarjeta h2 {
-    font-size: 0.85rem;
-    margin: 0 0 0.2rem;
-    color: #58a6ff;
-  }
+    .tarjeta {
+      background-color: #1f1f1f;
+      border-radius: 10px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      position: relative;
+    }
 
-  .tarjeta p {
-    font-size: 0.75rem;
-    flex-grow: 1;
-    margin: 0;
-    overflow: hidden;
-    max-height: 3.5em;
-    line-height: 1.2em;
-  }
+    .tarjeta img {
+      max-width: 100%;
+      height: 180px;
+      object-fit: contain;
+      margin-bottom: 0.5rem;
+    }
 
-  .acciones {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 0.5rem;
-  }
+    .tarjeta h3 {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      color: #4caf50;
+    }
 
-  .boton {
-    background: #238636;
-    color: white;
-    border: none;
-    padding: 0.4rem 0.7rem;
-    border-radius: 5px;
-    font-size: 0.75rem;
-    cursor: pointer;
-  }
+    .tarjeta p {
+      font-size: 0.9rem;
+      flex-grow: 1;
+    }
 
-  .estrella {
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: #555;
-    transition: color 0.2s;
-  }
+    .boton {
+      background-color: #00c853;
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
 
-  .estrella.activa {
-    color: gold;
-  }
-</style>
+    .estrella {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #777;
+    }
 
+    .estrella.fav {
+      color: gold;
+    }
+
+    #popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #popup .contenido {
+      background: #1e1e1e;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    #popup button {
+      background: #00c853;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      color: white;
+      margin-top: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #popup .cerrar {
+      margin-top: 1rem;
+      background: #555;
+    }
+
+    .acciones {
+      padding: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .acciones button {
+      background: gold;
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+
+    .acciones input {
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: none;
+      width: 200px;
+    }
+  </style>
 </head>
 <body>
-
   <header>
     <h1>🔥 OfertasZ</h1>
-    <button class="btn-toggle" onclick="verFavoritos()">⭐ Ver favoritos</button>
+    <div class="acciones">
+      <button onclick="mostrarFavoritos()">⭐ Ver favoritos</button>
+      <input class="buscador" type="text" placeholder="Buscar chollo..." oninput="filtrarOfertas(this.value)">
+    </div>
   </header>
 
-  <input type="text" id="buscador" placeholder="Buscar chollo..." oninput="filtrar()" />
+  <!-- Native Ad Banner -->
+  <script async="async" data-cfasync="false" src="//pl26928600.profitableratecpm.com/127e1bd4761db0b286576565e38dfc6b/invoke.js"></script>
+  <div id="container-127e1bd4761db0b286576565e38dfc6b"></div>
 
-  <div id="ofertas-container"></div>
-  <div class="paginacion" id="pagination"></div>
+  <div class="grid" id="contenedor"></div>
 
-  <footer>
-    <p>&copy; 2025 OfertasZ. Todos los derechos reservados. | Hecho con ❤️ y café</p>
-  </footer>
+  <!-- POPUP -->
+  <div id="popup" style="display:none;">
+    <div class="contenido">
+      <h2>🎁 Oferta destacada</h2>
+      <p>¡Haz clic para ver una oferta especial con tu descuento de afiliado Amazon!</p>
+      <button onclick="redirigir()">Ver ahora</button>
+      <button class="cerrar" onclick="cerrarPopup()">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Monetización directa -->
+  <iframe src="https://www.profitableratecpm.com/m8cy5uamn?key=3167f395abf1b5799d89f05a7e5e710f" style="display:none;"></iframe>
 
   <script>
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSE7fEFVv-U8Zu1egpFcgj28fSq5KOpaDPbLRCvYLpaM0ERCIvvTRAbXZ6-RzT0Q8SRF7MZoLDWU9y/pub?gid=0&single=true&output=csv";
-    const TAG = "tag=imadinho0c-21";
-    const PER_PAGE = 20;
-    let ofertas = [], pagina = 1, todas = [];
+    const urlSheet = "https://opensheet.elk.sh/1QmDXF5uXfEIx2V-2qkYJy8zSAhW52MW868VLEqmlSKk/Hoja%201";
+    const contenedor = document.getElementById("contenedor");
+    let todas = [];
+    let mostrarSoloFavoritos = false;
 
-    fetch(SHEET_URL)
-      .then(res => res.text())
-      .then(csv => {
-        ofertas = csv.trim().split("\n").slice(1).map(r => {
-          const c = r.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(x=>x.replace(/^"|"$/g,"").trim());
-          return { titulo:c[0], url:c[1], descripcion:c[2], fecha:c[3], imagen:c[4] };
-        }).filter(o=>o.titulo && o.url).reverse();
-        todas = [...ofertas];
-        renderPagina();
-        notificar();
-      });
-
-    function renderPagina() {
-      const cont = document.getElementById("ofertas-container");
-      const start = (pagina-1)*PER_PAGE;
-      const pagItems = ofertas.slice(start, start + PER_PAGE);
-      cont.innerHTML = pagItems.map(o => tarjetaHTML(o)).join("");
-      renderPagination();
+    async function cargarOfertas() {
+      const res = await fetch(urlSheet);
+      const datos = await res.json();
+      todas = datos;
+      mostrarOfertas();
     }
 
-  function tarjetaHTML(o) {
-  const img = o.imagen?.startsWith("http") ? o.imagen : 'https://via.placeholder.com/250x250?text=Oferta';
-  const favs = JSON.parse(localStorage.getItem("favs") || "[]");
-  const isFav = favs.includes(o.url);
-  return `
-    <div class="tarjeta" style="padding:0.5rem; font-size: 0.75rem; height: 280px;">
-      <img src="${img}" alt="Imagen oferta" style="height:100px; margin-bottom:0.5rem;" />
-      <h2 style="font-size: 0.85rem; margin-bottom:0.2rem; line-height:1.1;">${o.titulo}</h2>
-      <p style="flex-grow:1; overflow:hidden; max-height:45px;">${o.descripcion || ""}</p>
-      <div class="acciones" style="margin-top:0.5rem;">
-        <button class="boton" onclick="ir('${o.url}')">Ver oferta</button>
-        <span class="estrella ${isFav ? 'activa' : ''}" onclick="toggleFav(this,'${o.url}')">★</span>
-      </div>
-    </div>
-  `;
-}
+    function mostrarOfertas() {
+      contenedor.innerHTML = "";
+      const ofertas = mostrarSoloFavoritos
+        ? todas.filter(o => localStorage.getItem(o.url))
+        : todas;
 
+      ofertas.forEach(oferta => {
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "tarjeta";
 
-    function renderPagination() {
-      const total = Math.ceil(ofertas.length / PER_PAGE);
-      let html = '';
-      for(let i=1; i<=total; i++) html += `<button onclick="goPage(${i})">${i}</button>`;
-      document.getElementById("pagination").innerHTML = html;
-    }
+        const img = document.createElement("img");
+        img.src = oferta.imagen || "https://via.placeholder.com/300x180?text=Imagen+oferta";
+        img.alt = "Imagen oferta";
 
-    function goPage(n) { pagina = n; renderPagina(); }
+        const titulo = document.createElement("h3");
+        titulo.textContent = oferta.titulo;
 
-    function toggleFav(el,url){
-      let favs = JSON.parse(localStorage.getItem("favs")||"[]");
-      if(favs.includes(url)) el.classList.remove("activa"), favs=favs.filter(u=>u!==url);
-      else el.classList.add("activa"), favs.push(url);
-      localStorage.setItem("favs",JSON.stringify(favs));
-    }
+        const descripcion = document.createElement("p");
+        descripcion.textContent = oferta.descripcion;
 
-    function verFavoritos(){
-      const favs = JSON.parse(localStorage.getItem("favs")||"[]");
-      ofertas = todas.filter(o => favs.includes(o.url));
-      pagina = 1;
-      renderPagina();
-    }
+        const boton = document.createElement("a");
+        boton.href = generarLinkAfiliado(oferta.url);
+        boton.target = "_blank";
+        boton.className = "boton";
+        boton.textContent = "Ver oferta";
 
-    function ir(url){
-      window.open( url.includes("amazon") ? url + (url.includes('?')?'&':'?') + TAG : url, "_blank");
-    }
-
-    function filtrar() {
-      const query = document.getElementById("buscador").value.toLowerCase();
-      ofertas = todas.filter(o => o.titulo.toLowerCase().includes(query) || (o.descripcion && o.descripcion.toLowerCase().includes(query)));
-      pagina = 1;
-      renderPagina();
-    }
-
-    function notificar(){
-      if("Notification" in window && Notification.permission !== "granted"){
-        Notification.requestPermission().then(p => {
-          if(p==='granted'){
-            new Notification("👍 ¡OfertasZ activado!", { body: "Ahora recibirás notificaciones de nuevos chollos" });
-          }
+        boton.addEventListener("click", () => {
+          console.log("Click en oferta:", oferta.titulo);
         });
+
+        const estrella = document.createElement("span");
+        estrella.className = "estrella" + (localStorage.getItem(oferta.url) ? " fav" : "");
+        estrella.innerHTML = "★";
+        estrella.onclick = () => toggleFavorito(oferta.url, estrella);
+
+        tarjeta.appendChild(img);
+        tarjeta.appendChild(titulo);
+        tarjeta.appendChild(descripcion);
+        tarjeta.appendChild(boton);
+        tarjeta.appendChild(estrella);
+        contenedor.appendChild(tarjeta);
+      });
+    }
+
+    function toggleFavorito(url, el) {
+      if (localStorage.getItem(url)) {
+        localStorage.removeItem(url);
+        el.classList.remove("fav");
+      } else {
+        localStorage.setItem(url, "true");
+        el.classList.add("fav");
       }
     }
+
+    function mostrarFavoritos() {
+      mostrarSoloFavoritos = !mostrarSoloFavoritos;
+      mostrarOfertas();
+    }
+
+    function filtrarOfertas(texto) {
+      const tarjetas = document.querySelectorAll(".tarjeta");
+      tarjetas.forEach(t => {
+        const coincide = t.innerText.toLowerCase().includes(texto.toLowerCase());
+        t.style.display = coincide ? "flex" : "none";
+      });
+    }
+
+    function generarLinkAfiliado(url) {
+      if (url.includes("amazon.")) {
+        const asinMatch = url.match(/\/([A-Z0-9]{10})(?:[/?]|$)/i);
+        const asin = asinMatch ? asinMatch[1] : null;
+        return asin ? `https://www.amazon.es/dp/${asin}/?tag=imadinho0c-21` : url;
+      }
+      return url;
+    }
+
+    function redirigir() {
+      const url = "https://www.amazon.es/dp/B09FYV8B9Q/?tag=imadinho0c-21";
+      window.open(url, "_blank");
+    }
+
+    function cerrarPopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    window.addEventListener("load", () => {
+      cargarOfertas();
+      setTimeout(() => {
+        document.getElementById("popup").style.display = "flex";
+      }, 1500);
+    });
   </script>
 </body>
 </html>
