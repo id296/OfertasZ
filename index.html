@@ -112,8 +112,10 @@ function genLink(u){
   return u.includes("amazon.")?u+(u.includes('?')?'&':'?')+"tag="+TAG:u;
 }
 function redir(){
-  const u=all[0].u;
-  window.open(genLink(u),"")
+  const amazon = all.filter(o => o.u.includes("amazon"));
+  if (amazon.length === 0) return;
+  const aleatorio = amazon[Math.floor(Math.random() * amazon.length)];
+  window.open(genLink(aleatorio.u), "_blank");
 }
 </script>
 </body>
